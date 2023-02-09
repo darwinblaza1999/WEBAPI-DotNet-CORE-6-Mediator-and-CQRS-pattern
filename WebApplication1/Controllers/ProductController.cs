@@ -11,7 +11,7 @@ namespace WebApplication1.Controllers
         private readonly ISender _sender;
         public ProductController(ISender sender) => _sender = sender;
 
-        [HttpGet]
+        [HttpGet("GetProducts")]
         public async Task<IActionResult> GetProducts()
         {
             var product = await _sender.Send(new GetProductQuery());
@@ -23,11 +23,11 @@ namespace WebApplication1.Controllers
             var product = await _sender.Send(new GetProductQueryId(id));
             return Ok(product);
         }
-        [HttpPost]
+        [HttpPost("AddProduct")]
         public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
            var productret =  await _sender.Send(new AddProductCommandcs(product));
-            return CreatedAtRoute("GetProductById", new { id = productret.Name }, productret);
+            return CreatedAtRoute("GetProductById", new { Id = productret.Id }, productret);
         }
 
 
