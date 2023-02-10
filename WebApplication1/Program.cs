@@ -6,6 +6,8 @@ using WebApplication1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var provider = builder.Services.BuildServiceProvider();
+var configuration = provider.GetRequiredService<IConfiguration>();
 // Add services to the container.
 
 builder.Services.AddControllers();

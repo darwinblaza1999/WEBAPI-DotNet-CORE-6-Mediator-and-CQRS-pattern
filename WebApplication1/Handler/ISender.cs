@@ -9,6 +9,9 @@ namespace WebApplication1.Handler
     }
     public interface IPublisher
     {
-
+        Task Publish(object notification, CancellationToken cancellationToken = default);
+        Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+            where TNotification : INotification;
     }
+    public interface IMediator : ISender, IPublisher { }
 }

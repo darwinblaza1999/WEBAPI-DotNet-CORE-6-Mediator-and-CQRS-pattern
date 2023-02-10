@@ -8,28 +8,33 @@ namespace WebApplication1.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ISender _sender;
-        public ProductController(ISender sender) => _sender = sender;
+        private readonly IMediator _mediator;
+        public ProductController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet("GetProducts")]
         public async Task<IActionResult> GetProducts()
         {
-            var product = await _sender.Send(new GetProductQuery());
+            var product = await _mediator.Send(new GetProductQuery());
             return Ok(product);
         }
         [HttpGet("{id:int}", Name = "GetProductById")]
         public async Task<IActionResult> GetProducts(int id)
         {
-            var product = await _sender.Send(new GetProductQueryId(id));
+            var product = await _mediator.Send(new GetProductQueryId(id));
             return Ok(product);
         }
         [HttpPost("AddProduct")]
         public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
-           var productret =  await _sender.Send(new AddProductCommandcs(product));
-            return CreatedAtRoute("GetProductById", new { Id = productret.Id }, productret);
+           var productret =  await _mediator.Send(new AddProductCommandcs(product));
+            if(productret.Code == 200)
+            {
+                return Ok(productret);
+            }
+            else
+            {
+                return BadRequest(productret);
+            }
         }
-
-
     }
 }
